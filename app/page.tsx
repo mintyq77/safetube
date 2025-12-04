@@ -5,14 +5,11 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Video } from "@/types/database";
 import KidsHeader from "@/components/KidsHeader";
-import VideoModal from "@/components/VideoModal";
 
 export default function Home() {
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -54,16 +51,6 @@ export default function Home() {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
-
-  const handleVideoClick = (video: Video) => {
-    setSelectedVideo(video);
-    setIsModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    setSelectedVideo(null);
   };
 
   if (loading) {
@@ -116,10 +103,10 @@ export default function Home() {
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-5 lg:grid-cols-3">
             {videos.map((video) => (
-              <button
+              <a
                 key={video.id}
-                onClick={() => handleVideoClick(video)}
-                className="group block overflow-hidden rounded-2xl bg-white shadow-md transition-all hover:shadow-xl text-left"
+                href={`/watch/${video.id}`}
+                className="group block overflow-hidden rounded-2xl bg-white shadow-md transition-all hover:shadow-xl"
                 aria-label={`Watch ${video.title}`}
               >
                 {/* Thumbnail */}
@@ -173,20 +160,11 @@ export default function Home() {
                     {video.title}
                   </h3>
                 </div>
-              </button>
+              </a>
             ))}
           </div>
         )}
       </main>
-
-      {/* Video Modal */}
-      {selectedVideo && (
-        <VideoModal
-          video={selectedVideo}
-          isOpen={isModalOpen}
-          onClose={handleModalClose}
-        />
-      )}
     </div>
   );
 }

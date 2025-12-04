@@ -121,6 +121,7 @@ export default function WatchPage() {
             <button
               onClick={() => router.push("/")}
               className="rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+              aria-label="Go back to home"
             >
               <svg
                 className="h-6 w-6"
@@ -209,6 +210,7 @@ export default function WatchPage() {
                     key={recVideo.id}
                     href={`/watch/${recVideo.id}`}
                     className="group block overflow-hidden rounded-lg bg-white shadow-sm transition-all hover:shadow-md"
+                    aria-label={`Watch ${recVideo.title}`}
                   >
                     {/* Thumbnail */}
                     <div className="relative aspect-video w-full overflow-hidden bg-gray-200">

@@ -98,7 +98,8 @@ export default function Home() {
             </div>
             <button
               onClick={handleUnlinkDevice}
-              className="rounded-md bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
+              className="rounded-md bg-gray-100 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-200"
+              aria-label="Unlink this device from parent account"
             >
               Unlink Device
             </button>
@@ -156,6 +157,7 @@ export default function Home() {
                   key={video.id}
                   href={`/watch/${video.id}`}
                   className="group block overflow-hidden rounded-lg bg-white shadow-sm transition-all hover:shadow-md"
+                  aria-label={`Watch ${video.title}`}
                 >
                   {/* Thumbnail */}
                   <div className="relative aspect-video w-full overflow-hidden bg-gray-200">

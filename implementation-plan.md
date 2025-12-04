@@ -154,51 +154,51 @@ formats)
 
 **Tasks:**
 
-1. [] Build device linking flow
+1. [✓] Build device linking flow
 
-- [] Create /link-device/page.tsx
+- [✓] Create /link-device/page.tsx
 
-- [] Build email input form
+- [✓] Build email input form
 
-- [] Create /api/parent-by-email GET endpoint
+- [✓] Create /api/parent-by-email GET endpoint
 
-- [] Look up parent by email in database
+- [✓] Look up parent by email in database
 
-- [] Store parent_id in localStorage
+- [✓] Store parent_id in localStorage
 
-- [] Handle invalid email errors
+- [✓] Handle invalid email errors
 
-- [] Redirect to home feed after successful linking
+- [✓] Redirect to home feed after successful linking
 
-2. [] Create child home feed
+2. [✓] Create child home feed
 
-- [] Build main /page.tsx (child view)
+- [✓] Build main /page.tsx (child view)
 
-- [] Check for parent_id in localStorage
+- [✓] Check for parent_id in localStorage
 
-- [] Redirect to link-device if not found
+- [✓] Redirect to link-device if not found
 
-- [] Fetch videos for linked parent
+- [✓] Fetch videos for linked parent
 
-3. [] Build thumbnail grid
+3. [✓] Build thumbnail grid
 
-- [] Create responsive grid layout (2-3 columns mobile, 4-6 desktop)
+- [✓] Create responsive grid layout (2-3 columns mobile, 4-6 desktop)
 
-- [] Design video thumbnail card component
+- [✓] Design video thumbnail card component
 
-- [] Display title below thumbnail
+- [✓] Display title below thumbnail
 
-- [] Implement touch-friendly tap targets
+- [✓] Implement touch-friendly tap targets
 
-- [] Add loading skeleton states
+- [✓] Add loading skeleton states
 
-4. [] Implement watch count sorting
+4. [✓] Implement watch count sorting
 
-- [] Query videos sorted by watch_count ASC
+- [✓] Query videos sorted by watch_count ASC
 
-- [] Show least-watched videos first
+- [✓] Show least-watched videos first
 
-- [] Handle videos with same watch count (random or by date)
+- [✓] Handle videos with same watch count (random or by date)
 
 ---
 
@@ -206,53 +206,53 @@ formats)
 
 **Tasks:**
 
-1. [] Build video player page
+1. [✓] Build video player page
 
-- [] Create /watch/[videoId]/page.tsx
+- [✓] Create /watch/[videoId]/page.tsx
 
-- [] Fetch video details by ID
+- [✓] Fetch video details by ID
 
-- [] Implement YouTube IFrame embed
+- [✓] Implement YouTube IFrame embed
 
-- [] Use youtube-nocookie.com domain for privacy
+- [✓] Use youtube-nocookie.com domain for privacy
 
-- [] Set minimum player size (200x200px per ToS)
+- [✓] Set minimum player size (200x200px per ToS)
 
-- [] Make player responsive
+- [✓] Make player responsive
 
-2. [] Implement watch tracking
+2. [✓] Implement watch tracking
 
-- [] Create /api/videos/[id]/watch POST endpoint
+- [✓] Create /api/videos/[id]/watch POST endpoint
 
-- [] Increment watch_count in database
+- [✓] Increment watch_count in database
 
-- [] Update last_watched_at timestamp
+- [✓] Update last_watched_at timestamp
 
-- [] Call endpoint when video starts playing
+- [✓] Call endpoint when video starts playing
 
-- [] Handle tracking errors gracefully
+- [✓] Handle tracking errors gracefully
 
-3. [] Build recommendations section
+3. [✓] Build recommendations section
 
-- [] Fetch other videos from same parent's collection
+- [✓] Fetch other videos from same parent's collection
 
-- [] Exclude currently playing video
+- [✓] Exclude currently playing video
 
-- [] Sort by watch_count ASC (least watched first)
+- [✓] Sort by watch_count ASC (least watched first)
 
-- [] Add randomization option
+- [✓] Add randomization option
 
-- [] Display as thumbnail grid below player
+- [✓] Display as thumbnail grid below player
 
-- [] Make recommendations clickable to play next video
+- [✓] Make recommendations clickable to play next video
 
-4. [] Add navigation
+4. [✓] Add navigation
 
-- [] Add "Home" button to return to feed
+- [✓] Add "Home" button to return to feed
 
-- [] Implement back navigation
+- [✓] Implement back navigation
 
-- [] Ensure smooth transitions
+- [✓] Ensure smooth transitions
 
 ---
 
@@ -260,39 +260,39 @@ formats)
 
 **Tasks:**
 
-1. [] Configure PWA with next-pwa
+1. [✓] Configure PWA with next-pwa
 
-- [] Install and configure next-pwa
+- [✓] Install and configure next-pwa (@ducanh2912/next-pwa)
 
-- [] Create manifest.json with app metadata
+- [✓] Create manifest.json with app metadata
 
-- [] Set app name, short_name, description
+- [✓] Set app name, short_name, description
 
-- [] Configure display mode (standalone)
+- [✓] Configure display mode (standalone)
 
-- [] Set theme colors and background color
+- [✓] Set theme colors and background color
 
-2. [] Create app icons
+2. [✓] Create app icons
 
-- [] Generate icons in multiple sizes (192x192, 512x512, etc.)
+- [✓] Generate icons in multiple sizes (192x192, 512x512, etc.)
 
-- [] Create Apple touch icons
+- [✓] Create Apple touch icons
 
-- [] Add favicon
+- [✓] Add favicon
 
-- [] Place in /public directory
+- [✓] Place in /public directory
 
-3. [] Set up service worker
+3. [✓] Set up service worker
 
-- [] Configure caching strategies
+- [✓] Configure caching strategies
 
-- [] Cache static assets
+- [✓] Cache static assets
 
-- [] Handle offline scenarios
+- [✓] Handle offline scenarios
 
-- [] Test service worker registration
+- [] Test service worker registration (requires production build)
 
-4. [] Responsive design polish
+4. [~] Responsive design polish
 
 - [] Test on iPhone (various sizes)
 
@@ -302,21 +302,21 @@ formats)
 
 - [] Test on Android tablets
 
-- [] Fix any layout issues
+- [✓] Fix any layout issues
 
-- [] Ensure touch targets are adequate size (44x44px minimum)
+- [✓] Ensure touch targets are adequate size (44x44px minimum)
 
-5. [] UX improvements
+5. [✓] UX improvements
 
-- [] Add loading states throughout
+- [✓] Add loading states throughout
 
-- [] Implement error boundaries
+- [✓] Implement error boundaries
 
 - [] Add toast notifications for actions
 
-- [] Improve form validation feedback
+- [✓] Improve form validation feedback
 
-- [] Add accessibility features (ARIA labels, keyboard navigation)
+- [✓] Add accessibility features (ARIA labels, keyboard navigation)
 
 ---
 

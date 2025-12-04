@@ -187,7 +187,8 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
             </div>
             <button
               onClick={handleLogout}
-              className="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+              className="rounded-md bg-red-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+              aria-label="Logout from admin account"
             >
               Logout
             </button>
@@ -246,13 +247,13 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
                   value={videoUrl}
                   onChange={(e) => setVideoUrl(e.target.value)}
                   placeholder="https://www.youtube.com/watch?v=..."
-                  className="block flex-1 rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                  className="block flex-1 rounded-md border-0 px-4 py-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                   required
                 />
                 <button
                   type="submit"
                   disabled={addingVideo}
-                  className="rounded-md bg-blue-600 px-6 py-2 text-sm font-semibold text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-md bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {addingVideo ? "Adding..." : "Add Video"}
                 </button>
@@ -411,7 +412,8 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
                       <button
                         onClick={() => handleDeleteVideo(video.id)}
                         disabled={deletingVideoId === video.id}
-                        className="rounded-md bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-md bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
+                        aria-label={`Remove ${video.title} from collection`}
                       >
                         {deletingVideoId === video.id ? "Removing..." : "Remove"}
                       </button>

@@ -1,0 +1,31 @@
+{
+  "name": "SafeTube - Curated Videos for Kids",
+  "short_name": "SafeTube",
+  "description": "A safe, parent-curated YouTube video platform for children. Parents manage a whitelist of approved videos that kids can watch.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["education", "kids", "entertainment"],
+  "screenshots": []
+}

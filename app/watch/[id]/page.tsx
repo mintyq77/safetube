@@ -1,9 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 import { Video } from "@/types/database";
+
+// Declare YouTube IFrame API types
+declare global {
+  interface Window {
+    YT: any;
+    onYouTubeIframeAPIReady: () => void;
+  }
+}
 
 export default function WatchPage() {
   const router = useRouter();
@@ -11,9 +19,13 @@ export default function WatchPage() {
   const videoId = params.id as string;
 
   const [video, setVideo] = useState<Video | null>(null);
-  const [recommendations, setRecommendations] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showPlayButton, setShowPlayButton] = useState(true);
+  const [showBreakModal, setShowBreakModal] = useState(false);
+
+  const playerRef = useRef<any>(null);
+  const playerContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const parentId = localStorage.getItem("safetube_parent_id");
@@ -52,10 +64,6 @@ export default function WatchPage() {
 
       setVideo(currentVideo);
 
-      // Get recommendations (exclude current video, sort by watch count)
-      const otherVideos = allVideos.filter((v: Video) => v.id !== videoId);
-      setRecommendations(otherVideos);
-
       // Track the watch
       trackWatch(videoId);
     } catch (err: any) {
@@ -74,6 +82,131 @@ export default function WatchPage() {
       console.error("Failed to track watch:", error);
       // Don't show error to user, it's not critical
     }
+  };
+
+  // Load YouTube IFrame API
+  useEffect(() => {
+    if (!video) return;
+
+    // Load the IFrame Player API code asynchronously
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName("script")[0];
+    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+
+    // Create player when API is ready
+    window.onYouTubeIframeAPIReady = () => {
+      if (!playerContainerRef.current) return;
+
+      playerRef.current = new window.YT.Player("youtube-player", {
+        height: "100%",
+        width: "100%",
+        videoId: video.youtube_id,
+        playerVars: {
+          autoplay: 0,
+          rel: 0,
+          modestbranding: 1,
+          iv_load_policy: 3,
+          color: "white",
+          playsinline: 1,
+          fs: 1,
+        },
+        events: {
+          onStateChange: onPlayerStateChange,
+        },
+      });
+    };
+
+    // If API already loaded, initialize player
+    if (window.YT && window.YT.Player) {
+      window.onYouTubeIframeAPIReady();
+    }
+
+    return () => {
+      if (playerRef.current) {
+        playerRef.current.destroy();
+      }
+    };
+  }, [video]);
+
+  // Handle player state changes
+  const onPlayerStateChange = (event: any) => {
+    // Detect iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    // YT.PlayerState.ENDED = 0
+    if (event.data === 0) {
+      setShowBreakModal(true);
+    }
+    // YT.PlayerState.PAUSED = 2 (iOS native player exit)
+    else if (event.data === 2 && isIOS) {
+      setShowBreakModal(true);
+    }
+  };
+
+  // Listen for fullscreen changes (Desktop browsers)
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement) {
+        // User exited fullscreen
+        if (playerRef.current && !showBreakModal) {
+          setShowBreakModal(true);
+        }
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        handleFullscreenChange
+      );
+      document.removeEventListener(
+        "mozfullscreenchange",
+        handleFullscreenChange
+      );
+      document.removeEventListener(
+        "MSFullscreenChange",
+        handleFullscreenChange
+      );
+    };
+  }, [showBreakModal]);
+
+  // Handle play button click - play video and request fullscreen
+  const handlePlayClick = async () => {
+    if (!playerRef.current || !playerContainerRef.current) return;
+
+    setShowPlayButton(false);
+
+    // Play the video
+    playerRef.current.playVideo();
+
+    // Request fullscreen
+    try {
+      const element = playerContainerRef.current;
+      if (element.requestFullscreen) {
+        await element.requestFullscreen();
+      } else if ((element as any).webkitRequestFullscreen) {
+        await (element as any).webkitRequestFullscreen();
+      } else if ((element as any).mozRequestFullScreen) {
+        await (element as any).mozRequestFullScreen();
+      } else if ((element as any).msRequestFullscreen) {
+        await (element as any).msRequestFullscreen();
+      }
+    } catch (error) {
+      console.error("Failed to enter fullscreen:", error);
+      // Continue playing even if fullscreen fails
+    }
+  };
+
+  // Handle continue watching button
+  const handleContinueWatching = () => {
+    router.push("/");
   };
 
   const formatDuration = (seconds: number | null) => {
@@ -163,113 +296,87 @@ export default function WatchPage() {
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="space-y-8">
           {/* Video Player Section */}
-          <div className="overflow-hidden rounded-lg bg-black shadow-lg">
-            <div className="relative" style={{ paddingBottom: "56.25%" }}>
-              <iframe
-                className="absolute inset-0 h-full w-full"
-                src={`https://www.youtube-nocookie.com/embed/${video.youtube_id}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&color=white&playsinline=1&fs=1`}
-                title={video.title || "YouTube video player"}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
-          </div>
+          <div
+            ref={playerContainerRef}
+            className="relative overflow-hidden rounded-lg bg-black shadow-lg"
+            style={{ paddingBottom: "56.25%" }}
+          >
+            {/* YouTube Player Container */}
+            <div
+              id="youtube-player"
+              className="absolute inset-0 h-full w-full"
+            ></div>
 
-          {/* Video Info */}
-          <div className="rounded-lg bg-white p-6 shadow">
-            <h2 className="text-2xl font-bold text-gray-900">{video.title}</h2>
-            <div className="mt-2 flex items-center gap-4 text-sm text-gray-600">
-              <span>Duration: {formatDuration(video.duration_seconds)}</span>
-              <span>•</span>
-              <span>Watched: {video.watch_count}×</span>
-              {video.made_for_kids && (
-                <>
-                  <span>•</span>
-                  <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                    Made for Kids
-                  </span>
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* Recommendations */}
-          {recommendations.length > 0 && (
-            <div className="rounded-lg bg-white p-6 shadow">
-              <h3 className="text-lg font-semibold text-gray-900">
-                More Videos
-              </h3>
-              <p className="mt-1 text-sm text-gray-600">
-                {recommendations.length} video
-                {recommendations.length !== 1 ? "s" : ""} available
-              </p>
-
-              <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-                {recommendations.map((recVideo) => (
-                  <a
-                    key={recVideo.id}
-                    href={`/watch/${recVideo.id}`}
-                    className="group block overflow-hidden rounded-lg bg-white shadow-sm transition-all hover:shadow-md"
-                    aria-label={`Watch ${recVideo.title}`}
+            {/* Play Button Overlay */}
+            {showPlayButton && video.thumbnail_url && (
+              <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50">
+                <Image
+                  src={video.thumbnail_url}
+                  alt={video.title || "Video thumbnail"}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+                <button
+                  onClick={handlePlayClick}
+                  className="absolute z-20 flex h-24 w-24 items-center justify-center rounded-full bg-red-600 shadow-2xl transition-all hover:scale-110 hover:bg-red-500 active:scale-95"
+                  aria-label="Play video in fullscreen"
+                >
+                  <svg
+                    className="ml-1 h-12 w-12 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    {/* Thumbnail */}
-                    <div className="relative aspect-video w-full overflow-hidden bg-gray-200">
-                      {recVideo.thumbnail_url ? (
-                        <Image
-                          src={recVideo.thumbnail_url}
-                          alt={recVideo.title || "Video thumbnail"}
-                          fill
-                          className="object-cover transition-transform group-hover:scale-105"
-                          unoptimized
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center">
-                          <svg
-                            className="h-12 w-12 text-gray-400"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
-                        </div>
-                      )}
-                      {/* Duration Badge */}
-                      <div className="absolute bottom-2 right-2 rounded bg-black/80 px-1.5 py-0.5 text-xs font-medium text-white">
-                        {formatDuration(recVideo.duration_seconds)}
-                      </div>
-                      {/* Watch Count Badge */}
-                      {recVideo.watch_count > 0 && (
-                        <div className="absolute left-2 top-2 rounded bg-blue-600 px-1.5 py-0.5 text-xs font-medium text-white">
-                          Watched {recVideo.watch_count}×
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Title */}
-                    <div className="p-3">
-                      <h4 className="line-clamp-2 text-sm font-medium text-gray-900 group-hover:text-blue-600">
-                        {recVideo.title}
-                      </h4>
-                    </div>
-                  </a>
-                ))}
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </main>
+
+      {/* Take a Break Modal */}
+      {showBreakModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600 p-4">
+          <div className="w-full max-w-md space-y-8 text-center">
+            {/* Icon */}
+            <div className="mx-auto flex h-32 w-32 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
+              <svg
+                className="h-20 w-20 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+
+            {/* Message */}
+            <div className="space-y-4">
+              <h2 className="text-4xl font-bold text-white sm:text-5xl">
+                Time to Take a Break?
+              </h2>
+              <p className="text-xl text-white/90">
+                Great job watching! Ready to pick another video?
+              </p>
+            </div>
+
+            {/* Button */}
+            <button
+              onClick={handleContinueWatching}
+              className="mx-auto block rounded-full bg-white px-12 py-4 text-lg font-bold text-blue-600 shadow-2xl transition-all hover:scale-105 hover:shadow-3xl active:scale-95"
+            >
+              Continue Watching
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

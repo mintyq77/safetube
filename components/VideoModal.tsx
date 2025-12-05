@@ -262,11 +262,15 @@ export default function VideoModal({ video, isOpen, onClose }: VideoModalProps) 
     >
       {/* YouTube Player Container - Always mounted, hidden when not in playing mode */}
       <div
-        className={`${playMode === "playing" ? "h-full w-full" : "absolute opacity-0 pointer-events-none"}`}
+        className={`flex items-center justify-center ${playMode === "playing" ? "h-full w-full" : "absolute opacity-0 pointer-events-none"}`}
       >
         <div
           ref={playerContainerRef}
-          className="relative h-full w-full bg-black"
+          className={`relative bg-black ${
+            showPlayButton
+              ? "w-[90%] aspect-video"
+              : "h-full w-full"
+          }`}
         >
           <div
             id="youtube-player-modal"

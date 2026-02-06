@@ -307,159 +307,123 @@ export default function VideoModal({ video, isOpen, onClose }: VideoModalProps) 
 
       {/* Break Mode - Redesigned per mockup */}
       {playMode === "break" && (
-        <div className="relative flex h-full w-full flex-col items-center justify-center gap-6 p-6 sm:gap-8 sm:p-8">
-          {/* Background Image */}
-          <div
-            className="absolute inset-0 -z-10"
-            style={{ backgroundImage: "url(/Giraffe1.png)", backgroundSize: "cover" }}
-          />
-          {/* Black Overlay 60% opacity */}
-          <div className="absolute inset-0 -z-10 bg-black opacity-60" />
-          {/* Timer Icon */}
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-lg sm:h-20 sm:w-20">
-            <svg
-              className="h-10 w-10 text-gray-700 sm:h-12 sm:w-12"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
+        <div className="flex h-full w-full flex-col landscape:flex-row">
+          {/* Top Section (Portrait) / Left Section (Landscape) - White Background */}
+          <div className="flex flex-1 flex-col items-center justify-center gap-4 bg-white p-6 sm:gap-6 sm:p-8">
+            {/* Giraffe on Bike Illustration */}
+            <Image
+              src="/img/giraffe_break.png"
+              alt="Giraffe on bike"
+              width={600}
+              height={628}
+              className="w-48 sm:w-64 landscape:w-56"
+              priority
+            />
+
+            {/* Heading */}
+            <h2 className="text-center font-chewy text-2xl font-bold text-gray-800 sm:text-3xl landscape:text-2xl">
+              Time to take a break?
+            </h2>
+
+            {/* Primary CTA - Ok, I'm done! */}
+            <button
+              onClick={handleDone}
+              className="w-full max-w-xs rounded-full px-6 py-3 font-chewy text-xl font-bold text-white shadow-xl transition-all active:scale-95 sm:max-w-sm sm:px-8 sm:py-4 sm:text-2xl sm:hover:scale-105 landscape:max-w-xs landscape:text-lg"
+              style={{ backgroundColor: 'var(--color-btn-primary)' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-btn-primary-hover)'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-btn-primary)'}
             >
-              <circle cx="12" cy="13" r="9" />
-              <path d="M12 7v6l4 2" />
-              <path d="M9 2h6" />
-            </svg>
+              Ok, I'm done!
+            </button>
           </div>
 
-          {/* Heading */}
-          <h2 className="text-center font-chewy text-3xl font-bold text-white drop-shadow-lg sm:text-4xl">
-            Time to take a break?
-          </h2>
+          {/* Bottom Section (Portrait) / Right Section (Landscape) - Blue Background */}
+          <div className="flex flex-1 flex-col items-center justify-center gap-4 p-6 sm:gap-6 sm:p-8" style={{ backgroundColor: 'var(--color-primary-blue)' }}>
+            {/* "Back to my video" label */}
+            <p className="text-center text-base font-medium text-white sm:text-lg">
+              Back to my video
+            </p>
 
-          {/* Primary CTA - Ok, I'm done! */}
-          <button
-            onClick={handleDone}
-            className="w-full max-w-sm rounded-full bg-cyan-400 px-8 py-4 font-chewy text-2xl font-bold text-white shadow-2xl transition-all active:scale-95 sm:px-10 sm:py-5 sm:text-3xl sm:hover:scale-105 sm:hover:bg-cyan-300"
-          >
-            Ok, I'm done!
-          </button>
-
-          {/* Video Card - Back to my video */}
-          <button
-            onClick={handleBackToVideo}
-            className="group relative w-full max-w-sm overflow-hidden rounded-3xl shadow-2xl transition-all active:scale-95 sm:hover:scale-105"
-            aria-label="Back to my video"
-          >
-            {/* Video Thumbnail with Play Button */}
-            {video?.thumbnail_url && (
-              <div className="relative aspect-video w-full">
-                <Image
-                  src={video.thumbnail_url}
-                  alt={video.title || "Video thumbnail"}
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
-                {/* Dark overlay for better text readability */}
-                <div className="absolute inset-0 bg-black/30" />
-
-                {/* Text overlay on top */}
-                <div className="absolute left-0 right-0 top-0 px-6 py-4">
-                  <p className="text-center text-lg font-medium text-white drop-shadow-lg sm:text-xl">
-                    Back to my video
-                  </p>
-                </div>
-
-                {/* Play Button Overlay */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-200/90 transition-all group-hover:bg-gray-300/90 sm:h-20 sm:w-20 sm:group-hover:scale-110">
-                    <svg
-                      className="ml-1 h-8 w-8 text-gray-700 sm:h-10 sm:w-10"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
+            {/* Video Thumbnail Card */}
+            <button
+              onClick={handleBackToVideo}
+              className="group relative w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-xl transition-all active:scale-95 sm:hover:scale-105 landscape:max-w-md"
+              aria-label="Back to my video"
+            >
+              {video?.thumbnail_url && (
+                <div className="relative aspect-video w-full">
+                  <Image
+                    src={video.thumbnail_url}
+                    alt={video.title || "Video thumbnail"}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                  {/* Play Button Overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-600 transition-all group-hover:scale-110 sm:h-20 sm:w-20">
+                      <svg
+                        className="ml-1 h-8 w-8 text-white sm:h-10 sm:w-10"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </button>
+              )}
+            </button>
 
-          {/* Text Link - Watch something else */}
-          <button
-            onClick={handleWatchOtherVideo}
-            className="text-center text-base font-medium text-white transition-all active:opacity-80 sm:text-lg sm:hover:underline"
-          >
-            Or <span className="font-bold text-cyan-400">watch something else</span>
-          </button>
+            {/* Text Link - Watch something else */}
+            <button
+              onClick={handleWatchOtherVideo}
+              className="text-center text-sm font-medium text-white transition-all active:opacity-80 sm:text-base sm:hover:underline"
+            >
+              Watch something else
+            </button>
+          </div>
         </div>
       )}
 
       {/* Done Mode - Celebration Screen */}
       {playMode === "done" && (
-        <div className="relative flex h-full w-full flex-col items-center justify-center space-y-6 overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600 p-4 text-center sm:space-y-8 sm:p-6">
-          {/* Confetti Animation */}
-          {[...Array(150)].map((_, i) => (
-            <div
-              key={i}
-              className="confetti absolute"
-              style={{
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                backgroundColor: ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'][Math.floor(Math.random() * 6)],
-                width: `${Math.random() * 10 + 5}px`,
-                height: `${Math.random() * 10 + 5}px`,
-              }}
+        <div className="flex h-full w-full flex-col items-center justify-center bg-white landscape:flex-row">
+          {/* Celebrating Giraffe Illustration - Left side in landscape */}
+          <div className="flex flex-1 items-center justify-center p-4 sm:p-6">
+            <Image
+              src="/img/giraffe_celerate.png"
+              alt="Celebrating giraffe"
+              width={600}
+              height={628}
+              className="w-48 sm:w-64 landscape:w-56"
+              priority
             />
-          ))}
+          </div>
 
-          {/* Celebration Icon */}
-          <div className="relative z-10 mx-auto flex h-32 w-32 items-center justify-center rounded-full bg-yellow-400 shadow-2xl animate-bounce sm:h-40 sm:w-40">
-            <svg
-              className="h-20 w-20 text-white sm:h-24 sm:w-24"
-              fill="currentColor"
-              viewBox="0 0 24 24"
+          {/* Celebration Message & Button - Right side in landscape */}
+          <div className="flex flex-1 flex-col items-center justify-center space-y-4 p-4 text-center sm:space-y-6 sm:p-6">
+            {/* Celebration Message */}
+            <div className="space-y-2 sm:space-y-3">
+              <h2 className="font-chewy text-3xl font-bold text-gray-800 sm:text-4xl landscape:text-3xl">
+                Well done!
+              </h2>
+              <p className="text-lg text-gray-600 sm:text-xl landscape:text-lg">
+                See you next time
+              </p>
+            </div>
+
+            {/* Watch Other Video button */}
+            <button
+              onClick={handleWatchOtherVideo}
+              className="rounded-full px-8 py-3 text-base font-medium text-gray-700 shadow-lg transition-all active:scale-95 sm:px-10 sm:py-3 sm:text-lg sm:hover:scale-105"
+              style={{ backgroundColor: 'var(--color-btn-secondary)' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-btn-secondary-hover)'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-btn-secondary)'}
             >
-              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-            </svg>
+              Watch something else
+            </button>
           </div>
-
-          {/* Celebration Message */}
-          <div className="relative z-10 space-y-3 sm:space-y-4">
-            <h2 className="font-chewy text-4xl font-bold text-white sm:text-5xl md:text-6xl">
-              Well Done!
-            </h2>
-            <p className="text-xl text-white/90 sm:text-2xl">
-              See you next time! 👋
-            </p>
-          </div>
-
-          {/* Watch Other Video button */}
-          <button
-            onClick={handleWatchOtherVideo}
-            className="relative z-10 rounded-full bg-white px-10 py-3 text-base font-bold text-blue-600 shadow-2xl transition-all active:scale-95 sm:px-12 sm:py-4 sm:text-lg sm:hover:scale-105"
-          >
-            Watch Other Video
-          </button>
-
-          <style jsx>{`
-            @keyframes confetti-fall {
-              0% {
-                transform: translateY(-100vh) rotate(0deg);
-                opacity: 1;
-              }
-              100% {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-              }
-            }
-
-            .confetti {
-              position: absolute;
-              animation: confetti-fall 4s linear infinite;
-              border-radius: 2px;
-            }
-          `}</style>
         </div>
       )}
     </div>

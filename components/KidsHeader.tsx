@@ -27,7 +27,7 @@ export default function KidsHeader({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white px-4 py-3 shadow-md sm:px-6">
+    <header className="sticky top-0 z-40 px-4 py-3 shadow-md sm:px-6" style={{ backgroundColor: 'var(--background)' }}>
       <div className="mx-auto max-w-7xl">
         <div className="flex items-center justify-between">
           {/* Left side - Logo/Brand with optional back button */}
@@ -54,7 +54,7 @@ export default function KidsHeader({
               </button>
             )}
             <Image
-              src="/zootube-logo.png"
+              src="/img/zootube-logo.png"
               alt="ZooTube Logo"
               width={48}
               height={48}
@@ -70,23 +70,16 @@ export default function KidsHeader({
             <div className="relative z-50">
               <button
                 onClick={() => setShowMenu(!showMenu)}
-                className="flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-2 text-sm font-medium text-gray-900 hover:bg-yellow-200 sm:px-4"
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md transition-transform hover:scale-105 active:scale-95 sm:h-14 sm:w-14"
                 aria-label="User menu"
               >
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-                <span className="font-geist-sans">{childName}</span>
+                <Image
+                  src="/img/giraffe_profile.svg"
+                  alt={childName}
+                  width={40}
+                  height={40}
+                  className="h-8 w-8 sm:h-10 sm:w-10"
+                />
               </button>
               {showMenu && (
                 <div className="absolute right-0 top-full mt-2 w-40 rounded-lg bg-white shadow-lg">

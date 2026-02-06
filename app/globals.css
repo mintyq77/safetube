@@ -3,6 +3,29 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Brand Colors */
+  --color-primary-yellow: #F8BB25;
+  --color-primary-blue: #328EE5;
+  --color-accent-cyan: #22D3EE;
+
+  /* Semantic Colors - Kids App */
+  --color-kids-bg: var(--color-primary-yellow);
+  --color-kids-header-bg: var(--color-primary-yellow);
+  --color-break-bg: #FFFFFF;
+  --color-done-bg: #FFFFFF;
+  --color-break-section-bg: var(--color-primary-blue);
+
+  /* Button Colors */
+  --color-btn-primary: var(--color-primary-yellow);
+  --color-btn-primary-hover: #E5AA1F;
+  --color-btn-secondary: #E5E7EB;
+  --color-btn-secondary-hover: #D1D5DB;
+
+  /* Text Colors */
+  --color-text-primary: #1F2937;
+  --color-text-secondary: #6B7280;
+  --color-text-white: #FFFFFF;
 }
 
 @theme inline {
@@ -11,6 +34,11 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-chewy: var(--font-chewy);
+
+  /* Custom color palette for Tailwind */
+  --color-kids-yellow: var(--color-primary-yellow);
+  --color-kids-blue: var(--color-primary-blue);
+  --color-kids-cyan: var(--color-accent-cyan);
 }
 
 @media (prefers-color-scheme: dark) {

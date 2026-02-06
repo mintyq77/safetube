@@ -68,7 +68,7 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center" style={{ backgroundImage: "url(/Giraffe1.png)", backgroundSize: "auto" }}>
+      <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: 'var(--color-kids-bg)' }}>
         <div className="text-center">
           <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-amber-700 border-t-transparent"></div>
           <p className="text-lg font-medium text-amber-900">Loading videos...</p>
@@ -78,7 +78,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundImage: "url(/Giraffe1.png)", backgroundSize: "auto" }}>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-kids-bg)' }}>
       <KidsHeader showUserMenu={true} childName="Zoe" />
 
       {/* Main Content */}
@@ -91,9 +91,9 @@ export default function Home() {
 
         {videos.length === 0 ? (
           <div className="flex min-h-[60vh] items-center justify-center">
-            <div className="rounded-2xl bg-white p-8 text-center shadow-lg">
+            <div className="rounded-3xl bg-white p-10 text-center shadow-xl">
               <svg
-                className="mx-auto h-24 w-24 text-amber-700"
+                className="mx-auto h-24 w-24 text-gray-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -105,21 +105,21 @@ export default function Home() {
                   d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
                 />
               </svg>
-              <h2 className="mt-4 font-chewy text-2xl text-gray-900">
+              <h2 className="mt-6 font-chewy text-3xl text-gray-800">
                 No Videos Yet
               </h2>
-              <p className="mt-2 text-gray-600">
+              <p className="mt-3 text-base text-gray-600">
                 Ask your parent to add some videos to your collection!
               </p>
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-5 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
             {videos.map((video) => (
               <button
                 key={video.id}
                 onClick={() => handleVideoClick(video)}
-                className="group block overflow-hidden rounded-2xl bg-white shadow-md transition-all hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-amber-600 focus:ring-offset-2"
+                className="group block overflow-hidden rounded-3xl bg-white shadow-lg transition-all hover:shadow-2xl hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-yellow-400/50"
                 aria-label={`Watch ${video.title}`}
               >
                 {/* Thumbnail */}
@@ -169,7 +169,7 @@ export default function Home() {
 
                 {/* Title */}
                 <div className="p-4">
-                  <h3 className="line-clamp-2 text-sm font-medium text-gray-900 group-hover:text-amber-700">
+                  <h3 className="line-clamp-2 text-sm font-semibold text-gray-900">
                     {video.title}
                   </h3>
                 </div>
